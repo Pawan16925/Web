@@ -1,22 +1,44 @@
-async function fetchVideo() {
-    let url = document.getElementById("videoUrl").value;
-    
-    if (!url) {
-        alert("Please enter a valid URL!");
-        return;
-    }
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('login-username').value;
+    const password = document.getElementById('login-password').value;
 
-    let resultDiv = document.getElementById("result");
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Login successful!');
+        } else {
+            alert('Login failed: ' + data.message);
+        }
+    });
+});
 
-    // Fake fetching logic (since Terabox blocks direct access)
-    let fakeVideoUrl = "https://samplelib.com/lib/preview/mp4/sample-5s.mp4"; // Replace this dynamically
+document.getElementById('register-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('register-username').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
 
-    resultDiv.innerHTML = `
-        <video controls width="600">
-            <source src="${fakeVideoUrl}" type="video/mp4">
-            Your browser does not support video playback.
-        </video>
-        <br>
-        <a href="${fakeVideoUrl}" download>Download Video</a>
-    `;
-}
+    fetch('/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Registration successful!');
+        } else {
+            alert('Registration failed: ' + data.message);
+        }
+    });
+});
